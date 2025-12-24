@@ -15,6 +15,7 @@ import Services from "./pages/Services";
 import Cart from "./pages/Cart";
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
+import AIFeatures from "./pages/AIFeatures";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -38,6 +39,7 @@ const App = () => (
               <Route path="/cart" element={<Cart />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/admin" element={<Admin />} />
+              <Route path="/ai" element={<AIFeatures />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
           </BrowserRouter>
