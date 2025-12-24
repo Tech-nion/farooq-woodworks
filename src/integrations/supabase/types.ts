@@ -320,6 +320,7 @@ export type Database = {
           description: string | null
           duration_days: number | null
           id: string
+          image_url: string | null
           is_available: boolean | null
           max_price: number | null
           min_price: number
@@ -332,6 +333,7 @@ export type Database = {
           description?: string | null
           duration_days?: number | null
           id?: string
+          image_url?: string | null
           is_available?: boolean | null
           max_price?: number | null
           min_price: number
@@ -344,6 +346,7 @@ export type Database = {
           description?: string | null
           duration_days?: number | null
           id?: string
+          image_url?: string | null
           is_available?: boolean | null
           max_price?: number | null
           min_price?: number
