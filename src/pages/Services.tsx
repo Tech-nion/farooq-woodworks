@@ -131,7 +131,16 @@ const Services = () => {
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
               {services.map((service) => (
-                <Card key={service.id} className="hover-lift border-border/50">
+                <Card key={service.id} className="hover-lift border-border/50 overflow-hidden">
+                  {service.image_url && (
+                    <div className="aspect-video overflow-hidden">
+                      <img
+                        src={service.image_url}
+                        alt={service.name}
+                        className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                      />
+                    </div>
+                  )}
                   <CardHeader>
                     {service.category && (
                       <Badge variant="secondary" className="w-fit mb-2">{service.category.name}</Badge>
