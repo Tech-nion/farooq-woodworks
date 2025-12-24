@@ -1,41 +1,15 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Star, MapPin, CheckCircle } from "lucide-react";
-
-const workers = [
-  {
-    id: 1,
-    name: "Marcus Johnson",
-    specialty: "Custom Furniture",
-    location: "Portland, OR",
-    rating: 4.9,
-    reviews: 127,
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&q=80",
-    verified: true,
-  },
-  {
-    id: 2,
-    name: "Elena Rodriguez",
-    specialty: "Wood Carving",
-    location: "Austin, TX",
-    rating: 5.0,
-    reviews: 89,
-    image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400&q=80",
-    verified: true,
-  },
-  {
-    id: 3,
-    name: "James Chen",
-    specialty: "Restoration",
-    location: "Seattle, WA",
-    rating: 4.8,
-    reviews: 156,
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&q=80",
-    verified: true,
-  },
-];
+import { Badge } from "@/components/ui/badge";
+import { useWorkers } from "@/hooks/useWorkers";
+import { ArrowRight, Star, Clock, CheckCircle, Loader2 } from "lucide-react";
 
 const FeaturedWorkers = () => {
+  const { data: workers = [], isLoading } = useWorkers();
+
+  // Get top 3 workers by rating
+  const featuredWorkers = workers.slice(0, 3);
+
   return (
     <section className="section-padding">
       <div className="container-wide mx-auto">
@@ -54,58 +28,102 @@ const FeaturedWorkers = () => {
         </div>
 
         {/* Workers Grid */}
-        <div className="grid md:grid-cols-3 gap-8">
-          {workers.map((worker, index) => (
-            <div
-              key={worker.id}
-              className="group bg-card rounded-2xl p-6 border border-border hover-lift animate-fade-in"
-              style={{ animationDelay: `${index * 0.1}s` }}
-            >
-              <div className="flex items-start gap-4">
-                <div className="relative">
-                  <img
-                    src={worker.image}
-                    alt={worker.name}
-                    className="w-16 h-16 rounded-xl object-cover"
-                  />
-                  {worker.verified && (
+        {isLoading ? (
+          <div className="flex items-center justify-center py-20">
+            <Loader2 className="w-8 h-8 animate-spin text-primary" />
+          </div>
+        ) : featuredWorkers.length === 0 ? (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground">No craftsmen available yet.</p>
+          </div>
+        ) : (
+          <div className="grid md:grid-cols-3 gap-8">
+            {featuredWorkers.map((worker, index) => (
+              <div
+                key={worker.id}
+                className="group bg-card rounded-2xl p-6 border border-border hover-lift animate-fade-in"
+                style={{ animationDelay: `${index * 0.1}s` }}
+              >
+                <div className="flex items-start gap-4">
+                  <div className="relative">
+                    {worker.avatar_url ? (
+                      <img
+                        src={worker.avatar_url}
+                        alt={worker.name}
+                        className="w-16 h-16 rounded-xl object-cover"
+                      />
+                    ) : (
+                      <div className="w-16 h-16 rounded-xl bg-primary/10 flex items-center justify-center">
+                        <span className="text-2xl font-serif text-primary font-bold">
+                          {worker.name.charAt(0)}
+                        </span>
+                      </div>
+                    )}
                     <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-primary rounded-full flex items-center justify-center">
                       <CheckCircle className="w-3 h-3 text-primary-foreground" />
                     </div>
-                  )}
-                </div>
-                <div className="flex-1">
-                  <h3 className="font-serif font-semibold text-lg group-hover:text-primary transition-colors">
-                    {worker.name}
-                  </h3>
-                  <p className="text-primary text-sm font-medium">
-                    {worker.specialty}
-                  </p>
-                  <div className="flex items-center gap-2 mt-1 text-muted-foreground text-sm">
-                    <MapPin className="w-3 h-3" />
-                    {worker.location}
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center gap-2">
+                      <h3 className="font-serif font-semibold text-lg group-hover:text-primary transition-colors">
+                        {worker.name}
+                      </h3>
+                      <Badge variant={worker.is_available ? "default" : "secondary"} className="text-xs">
+                        {worker.is_available ? "Available" : "Busy"}
+                      </Badge>
+                    </div>
+                    <p className="text-primary text-sm font-medium">
+                      {worker.specialty}
+                    </p>
+                    <div className="flex items-center gap-2 mt-1 text-muted-foreground text-sm">
+                      <Clock className="w-3 h-3" />
+                      {worker.experience_years} years experience
+                    </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="flex items-center gap-4 mt-6 pt-4 border-t border-border">
-                <div className="flex items-center gap-1">
-                  <Star className="w-4 h-4 text-honey fill-honey" />
-                  <span className="font-semibold">{worker.rating}</span>
-                  <span className="text-muted-foreground text-sm">
-                    ({worker.reviews})
-                  </span>
+                {/* Bio snippet */}
+                {worker.bio && (
+                  <p className="text-sm text-muted-foreground mt-4 line-clamp-2">
+                    {worker.bio}
+                  </p>
+                )}
+
+                {/* Portfolio preview */}
+                {worker.portfolio_images && worker.portfolio_images.length > 0 && (
+                  <div className="flex gap-2 mt-4">
+                    {worker.portfolio_images.slice(0, 3).map((img, i) => (
+                      <div key={i} className="w-14 h-14 rounded-lg overflow-hidden">
+                        <img src={img} alt={`Work ${i + 1}`} className="w-full h-full object-cover" />
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                <div className="flex items-center gap-4 mt-6 pt-4 border-t border-border">
+                  <div className="flex items-center gap-1">
+                    <Star className="w-4 h-4 text-yellow-500 fill-yellow-500" />
+                    <span className="font-semibold">{worker.rating}</span>
+                    <span className="text-muted-foreground text-sm">
+                      ({worker.total_reviews})
+                    </span>
+                  </div>
+                  {worker.hourly_rate && (
+                    <span className="text-sm text-muted-foreground">
+                      ${worker.hourly_rate}/hr
+                    </span>
+                  )}
+                  <Link to={`/workers/${worker.id}`} className="ml-auto">
+                    <Button variant="ghost" size="sm" className="group/btn">
+                      View Profile
+                      <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                    </Button>
+                  </Link>
                 </div>
-                <Link to={`/workers/${worker.id}`} className="ml-auto">
-                  <Button variant="ghost" size="sm" className="group/btn">
-                    View Profile
-                    <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                  </Button>
-                </Link>
               </div>
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
 
         {/* CTA */}
         <div className="text-center mt-12">
