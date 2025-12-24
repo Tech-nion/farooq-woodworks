@@ -56,6 +56,7 @@ export interface Service {
   max_price: number | null;
   duration_days: number | null;
   is_available: boolean;
+  image_url: string | null;
   created_at: string;
   worker?: Worker;
   category?: Category;
