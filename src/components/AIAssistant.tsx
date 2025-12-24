@@ -3,12 +3,12 @@ import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Sparkles, MessageSquare, FileText, Calculator, Loader2 } from "lucide-react";
+import { Sparkles, MessageSquare, FileText, Calculator, Loader2, Image } from "lucide-react";
 import { toast } from "sonner";
 
 const AI_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-assistant`;
 
-type AIType = "recommendations" | "product-description" | "custom-quote";
+type AIType = "recommendations" | "product-description" | "custom-quote" | "showcase";
 
 export const AIAssistant = () => {
   const [prompt, setPrompt] = useState("");
@@ -93,6 +93,7 @@ export const AIAssistant = () => {
     recommendations: "I need a sturdy dining table for 6 people with a rustic look...",
     "product-description": "Custom oak dining table with hand-carved legs, 6ft x 3ft...",
     "custom-quote": "I want a custom wardrobe with sliding doors, walnut finish, 8ft tall...",
+    showcase: "Hand-carved mahogany door with intricate floral patterns, completed for a heritage home...",
   };
 
   return (
@@ -105,18 +106,22 @@ export const AIAssistant = () => {
       </CardHeader>
       <CardContent className="space-y-4">
         <Tabs value={activeType} onValueChange={(v) => setActiveType(v as AIType)}>
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="recommendations" className="flex items-center gap-1">
               <MessageSquare className="h-4 w-4" />
-              <span className="hidden sm:inline">Recommendations</span>
+              <span className="hidden sm:inline">Recommend</span>
             </TabsTrigger>
             <TabsTrigger value="product-description" className="flex items-center gap-1">
               <FileText className="h-4 w-4" />
-              <span className="hidden sm:inline">Descriptions</span>
+              <span className="hidden sm:inline">Describe</span>
+            </TabsTrigger>
+            <TabsTrigger value="showcase" className="flex items-center gap-1">
+              <Image className="h-4 w-4" />
+              <span className="hidden sm:inline">Showcase</span>
             </TabsTrigger>
             <TabsTrigger value="custom-quote" className="flex items-center gap-1">
               <Calculator className="h-4 w-4" />
-              <span className="hidden sm:inline">Project Info</span>
+              <span className="hidden sm:inline">Project</span>
             </TabsTrigger>
           </TabsList>
 
@@ -128,6 +133,11 @@ export const AIAssistant = () => {
           <TabsContent value="product-description" className="mt-4">
             <p className="text-sm text-muted-foreground mb-2">
               Enter product details to generate compelling descriptions for your items.
+            </p>
+          </TabsContent>
+          <TabsContent value="showcase" className="mt-4">
+            <p className="text-sm text-muted-foreground mb-2">
+              Describe your completed work to generate portfolio-worthy showcase descriptions.
             </p>
           </TabsContent>
           <TabsContent value="custom-quote" className="mt-4">
