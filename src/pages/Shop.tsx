@@ -4,12 +4,12 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useProducts } from "@/hooks/useProducts";
 import { useCategories } from "@/hooks/useCategories";
 import { useCart } from "@/contexts/CartContext";
-import { Heart, ShoppingCart, Search, Star, Loader2 } from "lucide-react";
+import { Heart, ShoppingCart, Star, Loader2, Search } from "lucide-react";
 import { toast } from "sonner";
+import { supabase } from "@/supabase/supabase"; // Import Supabase client
 
 const Shop = () => {
   const [categoryFilter, setCategoryFilter] = useState("all");
@@ -18,15 +18,31 @@ const Shop = () => {
   const { data: categories = [] } = useCategories();
   const { addToCart } = useCart();
 
+  // Function to add order to Supabase when product is added to cart
+  const logOrder = async (product: typeof products[0]) => {
+    const { data, error } = await supabase
+      .from("orders") // Make sure you have an "orders" table
+      .insert([
+        {
+          product_id: product.id,
+          quantity: 1
+        }
+      ]);
+
+    if (error) console.error("Error logging order:", error);
+    else console.log("Order logged:", data);
+  };
+
   const handleAddToCart = (product: typeof products[0]) => {
     addToCart(product);
     toast.success(`${product.name} added to cart!`);
+    logOrder(product); // Log to Supabase
   };
 
   return (
     <div className="min-h-screen bg-background">
       <Navbar />
-      
+
       <main className="pt-24 pb-16">
         {/* Header */}
         <section className="section-padding pt-8 pb-12">
@@ -44,39 +60,37 @@ const Shop = () => {
 
         {/* Search & Filters */}
         <section className="px-4 lg:px-8 pb-8">
-          <div className="container-wide mx-auto">
-            <div className="flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
-              {/* Search */}
-              <div className="relative w-full sm:w-80">
-                <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-                <Input
-                  placeholder="Search products..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
-              
-              {/* Categories */}
-              <div className="flex flex-wrap items-center gap-2">
+          <div className="container-wide mx-auto flex flex-col sm:flex-row gap-4 items-start sm:items-center justify-between">
+            {/* Search */}
+            <div className="relative w-full sm:w-80">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Input
+                placeholder="Search products..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10"
+              />
+            </div>
+
+            {/* Categories */}
+            <div className="flex flex-wrap items-center gap-2">
+              <Button
+                variant={categoryFilter === "all" ? "default" : "secondary"}
+                size="sm"
+                onClick={() => setCategoryFilter("all")}
+              >
+                All
+              </Button>
+              {categories.map((category) => (
                 <Button
-                  variant={categoryFilter === "all" ? "default" : "secondary"}
+                  key={category.id}
+                  variant={categoryFilter === category.id ? "default" : "secondary"}
                   size="sm"
-                  onClick={() => setCategoryFilter("all")}
+                  onClick={() => setCategoryFilter(category.id)}
                 >
-                  All
+                  {category.name}
                 </Button>
-                {categories.map(category => (
-                  <Button
-                    key={category.id}
-                    variant={categoryFilter === category.id ? "default" : "secondary"}
-                    size="sm"
-                    onClick={() => setCategoryFilter(category.id)}
-                  >
-                    {category.name}
-                  </Button>
-                ))}
-              </div>
+              ))}
             </div>
           </div>
         </section>
@@ -97,10 +111,12 @@ const Shop = () => {
             ) : (
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {products.map((product, index) => {
-                  const image = product.images?.[0] || "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80";
+                  const image =
+                    product.images?.[0] ||
+                    "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?w=600&q=80";
                   const hasDiscount = product.sale_price && product.sale_price < product.price;
                   const displayPrice = product.sale_price || product.price;
-                  
+
                   return (
                     <div
                       key={product.id}
@@ -114,26 +130,6 @@ const Shop = () => {
                             alt={product.name}
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                           />
-                          <button 
-                            className="absolute top-3 right-3 w-9 h-9 rounded-full bg-background/80 backdrop-blur-sm flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity hover:bg-background"
-                            onClick={(e) => e.preventDefault()}
-                          >
-                            <Heart className="w-4 h-4 text-foreground hover:text-primary transition-colors" />
-                          </button>
-                          {!product.in_stock && (
-                            <div className="absolute inset-0 bg-background/60 flex items-center justify-center">
-                              <span className="px-4 py-2 rounded-full bg-muted text-muted-foreground font-medium">
-                                Out of Stock
-                              </span>
-                            </div>
-                          )}
-                          {hasDiscount && (
-                            <div className="absolute top-3 left-3">
-                              <span className="px-2 py-1 rounded-md bg-destructive text-destructive-foreground text-xs font-bold">
-                                {Math.round((1 - product.sale_price! / product.price) * 100)}% OFF
-                              </span>
-                            </div>
-                          )}
                         </div>
                       </Link>
                       <div className="p-5">
@@ -146,7 +142,10 @@ const Shop = () => {
                           </h3>
                         </Link>
                         {product.worker && (
-                          <Link to={`/workers/${product.worker.id}`} className="text-sm text-muted-foreground hover:text-primary flex items-center gap-1 mt-1">
+                          <Link
+                            to={`/workers/${product.worker.id}`}
+                            className="text-sm text-muted-foreground hover:text-primary flex items-center gap-1 mt-1"
+                          >
                             By {product.worker.name}
                             <Star className="w-3 h-3 text-yellow-500 fill-yellow-500" />
                             {product.worker.rating}
@@ -160,8 +159,8 @@ const Shop = () => {
                             </span>
                           )}
                         </div>
-                        <Button 
-                          className="w-full mt-4" 
+                        <Button
+                          className="w-full mt-4"
                           disabled={!product.in_stock}
                           onClick={() => handleAddToCart(product)}
                         >
@@ -177,7 +176,7 @@ const Shop = () => {
           </div>
         </section>
       </main>
-      
+
       <Footer />
     </div>
   );
