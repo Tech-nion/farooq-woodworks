@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
 import SearchPanel from "@/components/SearchPanel";
-import { Menu, X, Hammer, ShoppingCart, User, LogOut, Search } from "lucide-react";
+import { Menu, X, Hammer, ShoppingCart, User, LogOut, Search, Sparkles } from "lucide-react";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -20,6 +20,7 @@ const Navbar = () => {
     { name: "Hire Workers", path: "/workers" },
     { name: "Shop", path: "/shop" },
     { name: "Services", path: "/services" },
+    { name: "AI", path: "/ai", icon: Sparkles },
   ];
 
   const isActive = (path: string) => location.pathname === path;
