@@ -34,6 +34,10 @@ serve(async (req) => {
         systemPrompt = `You are a woodworking project estimator. Help customers understand what goes into custom furniture projects. Provide helpful information about materials, timeframes, and considerations for their project.`;
         userPrompt = `Customer project request: ${prompt}. Provide helpful insights about this type of project, including key considerations, typical materials, and general guidance.`;
         break;
+      case "showcase":
+        systemPrompt = `You are a portfolio copywriter for a master woodworker. Generate captivating showcase descriptions for completed woodworking projects. Highlight the artistry, craftsmanship, challenges overcome, and the story behind each piece. Make it suitable for a portfolio or gallery display. Keep it engaging and professional (2-3 paragraphs).`;
+        userPrompt = `Generate a showcase/portfolio description for this completed project: ${prompt}. Make it compelling for potential clients viewing the gallery.`;
+        break;
       default:
         systemPrompt = `You are a helpful AI assistant for a woodworking and furniture business. Answer questions about woodworking, furniture care, customization options, and help customers with their inquiries.`;
     }
