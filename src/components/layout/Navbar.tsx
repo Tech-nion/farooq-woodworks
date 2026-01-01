@@ -37,7 +37,7 @@ const Navbar = () => {
                 <Hammer className="w-5 h-5 text-primary-foreground" />
               </div>
               <span className="font-serif text-xl font-semibold text-foreground group-hover:text-primary transition-colors hidden sm:block">
-                Farooq Wood Work
+                Farooq WoodWorks
               </span>
             </Link>
 
