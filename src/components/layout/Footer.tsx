@@ -15,7 +15,7 @@ const Footer = () => {
               <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
                 <Hammer className="w-5 h-5 text-primary-foreground" />
               </div>
-              <span className="font-serif text-xl font-semibold">Artisan Wood</span>
+              <span className="font-serif text-xl font-semibold">Farooq Wood Work</span>
             </Link>
             <p className="text-muted-foreground text-sm leading-relaxed">
               Connecting skilled craftsmen with those who appreciate the beauty 
@@ -88,7 +88,7 @@ const Footer = () => {
 
         <div className="mt-12 pt-8 border-t border-border flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-muted-foreground text-sm">
-            © 2024 Artisan Wood. All rights reserved.
+            © 2024 Farooq Wood Work. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
             <Link to="/privacy" className="text-muted-foreground text-sm hover:text-primary transition-colors">
