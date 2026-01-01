@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { useCart } from "@/contexts/CartContext";
 import { useAuth } from "@/contexts/AuthContext";
 import SearchPanel from "@/components/SearchPanel";
+import QuoteRequestDialog from "@/components/QuoteRequestDialog";
 import { Menu, X, Hammer, ShoppingCart, User, LogOut, Search, Sparkles } from "lucide-react";
 
 const Navbar = () => {
@@ -91,9 +92,7 @@ const Navbar = () => {
                 </Link>
               )}
               
-              <Link to="/services">
-                <Button variant="default">Get Quote</Button>
-              </Link>
+              <QuoteRequestDialog />
             </div>
 
             {/* Mobile Actions */}
@@ -159,11 +158,11 @@ const Navbar = () => {
                       </Button>
                     </Link>
                   )}
-                  <Link to="/services" onClick={() => setIsOpen(false)}>
+                  <QuoteRequestDialog trigger={
                     <Button variant="default" className="w-full">
                       Get Quote
                     </Button>
-                  </Link>
+                  } />
                 </div>
               </div>
             </div>
