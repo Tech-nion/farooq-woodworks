@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Play } from "lucide-react";
+import heroImage from "@/assets/hero-woodworking.jpg";
 const Hero = () => {
   return <section className="relative min-h-screen flex items-center pt-20">
       {/* Background Pattern */}
@@ -67,7 +68,7 @@ const Hero = () => {
           animationDelay: "0.2s"
         }}>
             <div className="aspect-[4/5] rounded-2xl overflow-hidden shadow-warm">
-              <img src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80" alt="Master craftsman working on wood" className="w-full h-full object-cover" />
+              <img src={heroImage} alt="Master craftsman working on wood" className="w-full h-full object-cover" />
             </div>
             
             {/* Floating Card */}
