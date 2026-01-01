@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
-import { Hammer, Mail, Phone, MapPin } from "lucide-react";
+import { Hammer, Mail, Phone, MapPin, MessageCircle } from "lucide-react";
 
 const Footer = () => {
+  const whatsappNumber = "923134649629";
+  const whatsappMessage = encodeURIComponent("I want more information about your products");
+
   return (
     <footer className="bg-card border-t border-border">
       <div className="container-wide mx-auto section-padding">
@@ -18,6 +21,15 @@ const Footer = () => {
               Connecting skilled craftsmen with those who appreciate the beauty 
               of handcrafted woodwork. Quality meets artistry.
             </p>
+            <a
+              href={`https://wa.me/${whatsappNumber}?text=${whatsappMessage}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg transition-colors text-sm font-medium"
+            >
+              <MessageCircle className="w-4 h-4" />
+              Chat on WhatsApp
+            </a>
           </div>
 
           {/* Quick Links */}
@@ -54,16 +66,21 @@ const Footer = () => {
             <h4 className="font-serif text-lg font-semibold mb-4">Contact Us</h4>
             <ul className="space-y-3">
               <li className="flex items-center gap-3 text-muted-foreground text-sm">
-                <Mail className="w-4 h-4 text-primary" />
-                hello@woodcraft.com
+                <Mail className="w-4 h-4 text-primary flex-shrink-0" />
+                <a href="mailto:geekstech29@gmail.com" className="hover:text-primary transition-colors">
+                  geekstech29@gmail.com
+                </a>
               </li>
               <li className="flex items-center gap-3 text-muted-foreground text-sm">
-                <Phone className="w-4 h-4 text-primary" />
-                +1 (555) 123-4567
+                <Phone className="w-4 h-4 text-primary flex-shrink-0" />
+                <div className="flex flex-col">
+                  <a href="tel:03134649629" className="hover:text-primary transition-colors">0313-4649629</a>
+                  <a href="tel:03124415740" className="hover:text-primary transition-colors">0312-4415740</a>
+                </div>
               </li>
               <li className="flex items-center gap-3 text-muted-foreground text-sm">
-                <MapPin className="w-4 h-4 text-primary" />
-                Portland, Oregon
+                <MapPin className="w-4 h-4 text-primary flex-shrink-0" />
+                Gujranwala, Punjab, Pakistan
               </li>
             </ul>
           </div>

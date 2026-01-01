@@ -9,7 +9,7 @@ import { useCategories } from "@/hooks/useCategories";
 import { useCart } from "@/contexts/CartContext";
 import { Heart, ShoppingCart, Star, Loader2, Search } from "lucide-react";
 import { toast } from "sonner";
-import { supabase } from "@/supabase/supabase"; // Import Supabase client
+import { supabase } from "@/integrations/supabase/client";
 
 const Shop = () => {
   const [categoryFilter, setCategoryFilter] = useState("all");
@@ -18,25 +18,10 @@ const Shop = () => {
   const { data: categories = [] } = useCategories();
   const { addToCart } = useCart();
 
-  // Function to add order to Supabase when product is added to cart
-  const logOrder = async (product: typeof products[0]) => {
-    const { data, error } = await supabase
-      .from("orders") // Make sure you have an "orders" table
-      .insert([
-        {
-          product_id: product.id,
-          quantity: 1
-        }
-      ]);
-
-    if (error) console.error("Error logging order:", error);
-    else console.log("Order logged:", data);
-  };
 
   const handleAddToCart = (product: typeof products[0]) => {
     addToCart(product);
     toast.success(`${product.name} added to cart!`);
-    logOrder(product); // Log to Supabase
   };
 
   return (

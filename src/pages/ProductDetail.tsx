@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 import { toast } from 'sonner';
-import { ArrowLeft, ShoppingCart, Minus, Plus, Star, Ruler, Package, User } from 'lucide-react';
+import { ArrowLeft, ShoppingCart, Minus, Plus, Star, Ruler, Package, User, MessageCircle } from 'lucide-react';
 
 const ProductDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -16,6 +16,12 @@ const ProductDetail = () => {
   const { addToCart } = useCart();
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
+
+  const whatsappNumber = "923134649629";
+  const getWhatsAppLink = () => {
+    const message = encodeURIComponent(`I want more information about this product: ${product?.name}`);
+    return `https://wa.me/${whatsappNumber}?text=${message}`;
+  };
 
   const handleAddToCart = () => {
     if (product) {
@@ -192,6 +198,17 @@ const ProductDetail = () => {
                   </Button>
                 </div>
               )}
+              
+              {/* WhatsApp Contact Button */}
+              <a
+                href={getWhatsAppLink()}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg transition-colors font-medium w-full sm:w-auto"
+              >
+                <MessageCircle className="w-5 h-5" />
+                Ask About This Product on WhatsApp
+              </a>
             </div>
           </div>
         </div>
