@@ -5,6 +5,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { CartProvider } from "@/contexts/CartContext";
+import FloatingWhatsApp from "@/components/FloatingWhatsApp";
 import Index from "./pages/Index";
 import Showcase from "./pages/Showcase";
 import Workers from "./pages/Workers";
@@ -42,6 +43,7 @@ const App = () => (
               <Route path="/ai" element={<AIFeatures />} />
               <Route path="*" element={<NotFound />} />
             </Routes>
+            <FloatingWhatsApp />
           </BrowserRouter>
         </TooltipProvider>
       </CartProvider>
